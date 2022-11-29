@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Nuevo producto</title>
+    <link rel="stylesheet" href="./bootstrap.min.css">
+  </head>
+  <body>
+
+    <!-- Interface -->
+    <form class="p-4">
+      <div class="form-group">
+        <input type="text" id="name" class="form-control" placeholder="Nombre del Producto" autofocus>
+      </div>
+      <div class="form-group">
+        <input type="number" id="price" class="form-control"  step = "0.01"     placeholder="Precio Costo">
+      </div>
+      <div class="form-group">
+        <input type="number" id="porcentaje" class="form-control" step = "0.01"   placeholder="Porcentaje de Ganancia">
+      </div>
+      <button class="btn btn-primary btn-block">
+        Guardar
+      </button>
+    </form>
+
+    <!-- Logic -->
+    <script>
+      const { ipcRenderer } = require('electron');
+
+      const form = document.querySelector('form');
+      form.addEventListener('submit', e => {
+        e.preventDefault();
+
+        const nameProduct = document.querySelector('#name').value;
+        const priceProduct = document.querySelector('#price').value;
+        const porceProduct = document.querySelector('#porcentaje').value;
+        const precioFinal = (document.querySelector("#porcentaje").value / 100) * document.querySelector("#price").value + parseFloat(document.querySelector("#price").value)
+
+        const newProduct = {
+          name: nameProduct,
+          price: priceProduct,
+          porcentaje: porceProduct,
+          venta: precioFinal.toFixed(2)
+        };
+
+        ipcRenderer.send('product:new', newProduct);
+      });
+
+    </script>
+
+  </body>
+</html>
